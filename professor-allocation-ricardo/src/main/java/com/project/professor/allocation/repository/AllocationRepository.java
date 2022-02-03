@@ -10,4 +10,6 @@ import java.util.List;
 public interface AllocationRepository extends JpaRepository<Allocation, Long> {
 
     List<Allocation> findByCourseId(Long courseId);
+
+    List<Allocation> findByProfessorId(Long courseId);
 }
