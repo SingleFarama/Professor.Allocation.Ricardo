@@ -2,6 +2,7 @@ package com.project.professor.allocation.service;
 
 import com.project.professor.allocation.entity.Course;
 import com.project.professor.allocation.repository.AllocationRepository;
+import com.project.professor.allocation.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,48 +11,20 @@ import java.util.Optional;
 @Service
 public class CourseService {
 
-    private CourseService courseService;
+    private CourseRepository courseRepository;
 
-    public AllocationService(AllocationRepository allocationRepository, ProfessorService professorService,
-                             CourseService courseService) {
-        this.allocationRepository = allocationRepository;
-        this.professorService = professorService;
-        this.courseService = courseService;
+    public CourseService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
-    public List<Allocation> findByProfessorId(Long professorId)
-    {
-        if (professorId != null)
-        {
-            List<Allocation> allocations = allocationRepository.findByProfessorId(professorId);
-            return allocations;
-        }
-        else
-        {
-            return null;
-        }
-    }
 
-    public List<Allocation> findByCourseId(Long courseId)
-    {
-        if (courseId != null)
-        {
-            List<Allocation> allocations = allocationRepository.findByCourseId(courseId);
-            return allocations;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public Allocation findById(Long id)
+    public Course findById(Long id)
     {
         if (id != null)
         {
-            Optional<Allocation> allocationOptional = allocationRepository.findById(id);
-            Allocation allocation = allocationOptional.orElse(null);
-            return allocation;
+            Optional<Course> courseOptional = courseRepository.findById(id);
+            Course course = courseOptional.orElse(null);
+            return course;
         }
         else
         {
@@ -59,27 +32,27 @@ public class CourseService {
         }
     }
 
-    public List<Allocation> findAll()
+    public List<Course> findAll()
     {
-        List<Allocation> allocations = allocationRepository.findAll();
-        return allocations;
+        List<Course> courses = courseRepository.findAll();
+        return courses;
     }
 
-    public Allocation create(Allocation allocation)
+    public Course create(Course course)
     {
-        allocation.setId(null);
-        Allocation allocationNew = saveInternal(allocation);
-        return allocationNew;
+        course.setId(null);
+        Course courseNew = courseRepository.save(course);
+        return courseNew;
     }
 
-    public Allocation update(Allocation allocation)
+    public Course update(Course course)
     {
-        Long id = allocation.getId();
+        Long id = course.getId();
 
-        if (id != null && allocationRepository.existsById(id))
+        if (id != null && courseRepository.existsById(id))
         {
-            Allocation allocationNew = saveInternal(allocation);
-            return allocationNew;
+            Course courseNew = courseRepository.save(course);
+            return courseNew;
         }
         else
         {
@@ -89,52 +62,22 @@ public class CourseService {
 
     public void deleteById(Long id)
     {
-        if (id != null && allocationRepository.existsById(id))
+        if (id != null && courseRepository.existsById(id))
         {
-            allocationRepository.deleteById(id);
+            courseRepository.deleteById(id);
         }
     }
 
     public void deleteAll()
     {
-        allocationRepository.deleteAll();
+        courseRepository.deleteAll();
     }
 
-    private Allocation saveInternal(Allocation allocation) {
-        if (hasCollision(allocation)) {
-            throw new RuntimeException();
-        } else {
-            allocation = allocationRepository.save(allocation);
+    private Course save(Course course) {
 
-            Professor professor = professorService.findById(allocation.getProfessorId());
-            allocation.setProfessor(professor);
+        course = courseRepository.save(course);
 
-            Course course = courseService.findById(allocation.getCourseId());
-            allocation.setCourse(course);
-
-            return allocation;
+        return course;
         }
     }
 
-    boolean hasCollision(Allocation newAllocation) {
-        boolean hasCollision = false;
-
-        List<Allocation> currentAllocations = allocationRepository.findByProfessorId(newAllocation.getProfessorId());
-
-        for (Allocation currentAllocation : currentAllocations) {
-            hasCollision = hasCollision(currentAllocation, newAllocation);
-            if (hasCollision) {
-                break;
-            }
-        }
-
-        return hasCollision;
-    }
-
-    private boolean hasCollision(Allocation currentAllocation, Allocation newAllocation) {
-        return !currentAllocation.getId().equals(newAllocation.getId())
-                && currentAllocation.getDayOfWeek() == newAllocation.getDayOfWeek()
-                && currentAllocation.getStartHour().compareTo(newAllocation.getEndHour()) < 0
-                && newAllocation.getStartHour().compareTo(currentAllocation.getEndHour()) < 0;
-    }
-}
