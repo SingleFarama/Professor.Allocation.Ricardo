@@ -18,12 +18,6 @@ public class ProfessorService {
         this.professorRepository = professorRepository;
     }
 
-    public Professor findById(Long id)
-    {
-        Optional<Professor> professorOptional = professorRepository.findById(id);
-        Professor professor = professorOptional.orElse(null);
-        return professor;
-    }
 
     public List<Professor> findByDepartmentId(Long departmentId)
     {
@@ -104,4 +98,4 @@ public class ProfessorService {
             return professor;
         }
     }
-}
+
