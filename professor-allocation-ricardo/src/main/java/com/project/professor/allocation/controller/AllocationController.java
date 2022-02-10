@@ -64,6 +64,4 @@ public class AllocationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-    
 }

@@ -1,5 +1,7 @@
 package com.project.professor.allocation.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +15,7 @@ import javax.persistence.Table;
 @Table(name = "professor")
 public class Professor {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +26,11 @@ public class Professor {
     @Column(name = "cpf", unique = true, nullable = false)
     private String cpf;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "department_id", nullable = false)
     private Long departmentId;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToOne(optional = false)
     @JoinColumn(name = "department_id", nullable = false, insertable = false, updatable = false)
     private Department department;
