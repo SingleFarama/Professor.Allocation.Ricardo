@@ -21,9 +21,53 @@ public class CourseRepositoryTest {
     CourseRepository courseRepository;
 
     @Test
-    public void findAll()
-    {
+    public void findAll() {
         List<Course> courses = courseRepository.findAll();
-        System.out.println(courses);
+
+        courses.forEach(System.out::println);
+    }
+
+    @Test
+    public void findById() {
+        Long id = 1L;
+
+        Course course = courseRepository.findById(id).orElse(null);
+
+        System.out.println(course);
+    }
+
+    @Test
+    public void create() {
+        Course course = new Course();
+        course.setId(null);
+        course.setName("Course 1");
+
+        course = courseRepository.save(course);
+
+        System.out.println(course);
+    }
+
+    @Test
+    public void update() {
+        Course course = new Course();
+        course.setId(1L);
+        course.setName("Course 2");
+
+        course = courseRepository.save(course);
+
+        System.out.println(course);
+    }
+
+    @Test
+    public void deleteById() {
+        Long id = 1L;
+
+        courseRepository.deleteById(id);
+    }
+
+    @Test
+    public void deleteAll() {
+        courseRepository.deleteAllInBatch();
     }
 }
+
