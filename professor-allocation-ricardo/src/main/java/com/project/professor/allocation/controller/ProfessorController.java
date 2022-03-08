@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping(path = "/Allocations")
 public class ProfessorController {
 
     private final ProfessorService professorService;
