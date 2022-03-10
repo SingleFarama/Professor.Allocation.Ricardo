@@ -1,13 +1,11 @@
 package com.project.professor.allocation.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "course")
@@ -20,6 +18,11 @@ public class Course {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "course")
+    private List<Allocation> allocations;
 
     public Long getId() {
         return id;
@@ -36,6 +39,11 @@ public class Course {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void setAllocations(List<Allocation> allocations) {
+        this.allocations = allocations;
+    }
+
 
     @Override
     public String toString() {

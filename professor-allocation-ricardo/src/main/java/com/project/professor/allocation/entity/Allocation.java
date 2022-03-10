@@ -1,6 +1,7 @@
 package com.project.professor.allocation.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -50,11 +51,13 @@ public class Allocation {
     private Long courseId;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnoreProperties({"allocations"})
     @ManyToOne(optional = false)
     @JoinColumn(name = "professor_id", nullable = false, insertable = false, updatable = false)
     private Professor professor;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnoreProperties({"allocations"})
     @ManyToOne(optional = false)
     @JoinColumn(name = "course_id", nullable = false, insertable = false, updatable = false)
     private Course course;
@@ -62,7 +65,6 @@ public class Allocation {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -70,7 +72,6 @@ public class Allocation {
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }
-
     public void setDayOfWeek(DayOfWeek dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
@@ -78,7 +79,6 @@ public class Allocation {
     public Date getStartHour() {
         return startHour;
     }
-
     public void setStartHour(Date startHour) {
         this.startHour = startHour;
     }
@@ -86,7 +86,6 @@ public class Allocation {
     public Date getEndHour() {
         return endHour;
     }
-
     public void setEndHour(Date endHour) {
         this.endHour = endHour;
     }
@@ -94,7 +93,6 @@ public class Allocation {
     public Long getProfessorId() {
         return professorId;
     }
-
     public void setProfessorId(Long professorId) {
         this.professorId = professorId;
     }
@@ -102,7 +100,6 @@ public class Allocation {
     public Long getCourseId() {
         return courseId;
     }
-
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
@@ -110,7 +107,6 @@ public class Allocation {
     public Professor getProfessor() {
         return professor;
     }
-
     public void setProfessor(Professor professor) {
         this.professor = professor;
     }
@@ -118,7 +114,6 @@ public class Allocation {
     public Course getCourse() {
         return course;
     }
-
     public void setCourse(Course course) {
         this.course = course;
     }
