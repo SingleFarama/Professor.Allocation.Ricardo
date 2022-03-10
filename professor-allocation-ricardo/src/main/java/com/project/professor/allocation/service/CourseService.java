@@ -1,5 +1,6 @@
 package com.project.professor.allocation.service;
 
+import com.project.professor.allocation.entity.Allocation;
 import com.project.professor.allocation.entity.Course;
 import com.project.professor.allocation.repository.AllocationRepository;
 import com.project.professor.allocation.repository.CourseRepository;
@@ -12,9 +13,14 @@ import java.util.Optional;
 public class CourseService {
 
     private CourseRepository courseRepository;
+    private final AllocationRepository allocationRepository;
 
-    public CourseService(CourseRepository courseRepository) {
+
+    public CourseService(CourseRepository courseRepository, AllocationRepository allocationRepository) {
+        super();
         this.courseRepository = courseRepository;
+        this.allocationRepository = allocationRepository;
+
     }
 
 
@@ -25,17 +31,17 @@ public class CourseService {
             Optional<Course> courseOptional = courseRepository.findById(id);
             Course course = courseOptional.orElse(null);
             return course;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public List<Course> findAll()
-    {
-        List<Course> courses = courseRepository.findAll();
-        return courses;
+    public List<Course> findAll(String name) {
+        if (name == null) {
+            return courseRepository.findAll();
+        } else {
+            return courseRepository.findByNameContaining(name);
+        }
     }
 
     public Course create(Course course)
@@ -73,11 +79,13 @@ public class CourseService {
         courseRepository.deleteAll();
     }
 
-    private Course save(Course course) {
-
+    private Course saveInternal(Course course) {
         course = courseRepository.save(course);
 
+        List<Allocation> allocations = allocationRepository.findByCourseId(course.getId());
+        course.setAllocations(allocations);
+
         return course;
-        }
     }
+}
 

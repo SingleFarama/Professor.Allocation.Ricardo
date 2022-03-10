@@ -18,6 +18,7 @@ public class AllocationService {
 
     public AllocationService(AllocationRepository allocationRepository, ProfessorService professorService,
                              CourseService courseService) {
+        super();
         this.allocationRepository = allocationRepository;
         this.professorService = professorService;
         this.courseService = courseService;
@@ -29,9 +30,7 @@ public class AllocationService {
         {
             List<Allocation> allocations = allocationRepository.findByProfessorId(professorId);
             return allocations;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
@@ -80,13 +79,10 @@ public class AllocationService {
     {
         Long id = allocation.getId();
 
-        if (id != null && allocationRepository.existsById(id))
-        {
+        if (id != null && allocationRepository.existsById(id)) {
             Allocation allocationNew = saveInternal(allocation);
             return allocationNew;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
@@ -118,6 +114,11 @@ public class AllocationService {
 
             return allocation;
         }
+    }
+
+    boolean isEndHourGreaterThanStartHour(Allocation allocation) {
+        return allocation != null && allocation.getStartHour() != null && allocation.getEndHour() != null
+                && allocation.getEndHour().compareTo(allocation.getStartHour()) > 0;
     }
 
     boolean hasCollision(Allocation newAllocation) {
